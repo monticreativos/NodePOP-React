@@ -5,7 +5,9 @@ import Filter from '../../common/filter';
 import Photo from '../../common/Photo';
 import Page from '../../layout/Page';
 import { deletedAdvert, getTweet } from '../service';
+import Swal from 'sweetalert2'
 
+import ButtonDeleted from '../../common/ButtonDeleted';
 
 class AdvertPage extends React.Component {
   
@@ -17,19 +19,35 @@ class AdvertPage extends React.Component {
       error: null,
       isLoading: false,
     };
-
-  }
-
-  handleDeletedAdvert = async() => {
     
-    try {
-      const advert = await deletedAdvert(this.props.tweetId);
-      // this.setState({ advert, isLoading: false });
-      window.location.href = '/adverts';
-    } catch (error) {
-      this.setState({ isLoading: false, error });
-    }
+
   }
+
+  // handleDeletedAdvert = async() => {
+
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete it!'
+  //   }).then(async(result) => {
+  //     if (result.isConfirmed) {
+  //       try {
+  //         await deletedAdvert(this.props.tweetId);
+  //         // this.setState({ advert, isLoading: false });
+  //         this.navigate('/adverts')
+  //         // window.location.href = '/adverts';
+  //       } catch (error) {
+  //         this.setState({ isLoading: false, error });
+  //       }
+  //     }
+  //   })
+    
+    
+  // }
 
   handleGetTweet = async () => {
     this.setState({ isLoading: true, error: null });
@@ -99,10 +117,11 @@ class AdvertPage extends React.Component {
                   }) : advert.tags
                 }
                 </div>
-                <button className="btn btn-warning" id="deleteButton" onClick={ () => {
+                {/* <button className="btn btn-warning" id="deleteButton" onClick={ () => {
                   this.handleDeletedAdvert()
                 }
-                  }>Delete Advert</button>
+                  }>Delete Advert</button> */}
+                  <ButtonDeleted advertId = {this.props.tweetId}/>
               </div>
             </article>
           </div>

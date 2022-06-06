@@ -24,5 +24,13 @@ export const setAuthorizationHeader = token =>
 export const removeAuthorizationHeader = () => {
   delete client.defaults.headers.common['Authorization'];
 };
+export const configureClient = ({ accessToken }) => {
+  if (accessToken) {
+    setAuthorizationHeader(accessToken);
+  }
+};
 
+export const resetClient = () => {
+  removeAuthorizationHeader();
+};
 export default client;
