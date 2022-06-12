@@ -38,6 +38,8 @@
   flex-direction: row;
   align-items: end;
   justify-content: flex-start;
+
+  flex-wrap: wrap;
 }
 
 .layout-content li {

@@ -1,26 +1,22 @@
-import { formatDistanceToNow } from 'date-fns';
-import React, { useEffect, useRef, useState } from 'react';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
-import Filter from '../../common/filter';
-import Photo from '../../common/Photo';
-import Page from '../../layout/Page';
-import { deletedAdvert, getTweet } from '../service';
+import { formatDistanceToNow } from 'date-fns'
+import React, { useEffect, useRef, useState } from 'react'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import Filter from '../AdvertsPage/filter'
+import Photo from '../../common/Photo'
+import Page from '../../layout/Page'
+import { deletedAdvert, getTweet } from '../service'
 import Swal from 'sweetalert2'
 
-import ButtonDeleted from '../../common/ButtonDeleted';
+import ButtonDeleted from '../../common/ButtonDeleted'
 
 class AdvertPage extends React.Component {
-  
-
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       advert: null,
       error: null,
       isLoading: false,
-    };
-    
-
+    }
   }
 
   // handleDeletedAdvert = async() => {
@@ -45,89 +41,98 @@ class AdvertPage extends React.Component {
   //       }
   //     }
   //   })
-    
-    
+
   // }
 
   handleGetTweet = async () => {
-    this.setState({ isLoading: true, error: null });
+    this.setState({ isLoading: true, error: null })
     try {
       console.log(this.props.tweetId)
-      const advert = await getTweet(this.props.tweetId);
-      this.setState({ advert, isLoading: false });
+      const advert = await getTweet(this.props.tweetId)
+      this.setState({ advert, isLoading: false })
     } catch (error) {
-      this.setState({ isLoading: false, error });
+      this.setState({ isLoading: false, error })
     }
-  };
+  }
 
   componentDidMount() {
-    this.handleGetTweet();
+    this.handleGetTweet()
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('old', prevProps, prevState);
-    console.log('new', this.props, this.state);
+    console.log('old', prevProps, prevState)
+    console.log('new', this.props, this.state)
     if (prevProps.tweetId !== this.props.tweetId) {
       console.log(this.props.tweetId)
 
-      this.handleGetTweet();
+      this.handleGetTweet()
     }
   }
 
   componentWillUnmount() {
-    console.log('unmont');
+    console.log('unmont')
     // clean tasks
   }
 
   render() {
-    const { advert, error, isLoading } = this.state;
-    let count = 0;
+    const { advert, error, isLoading } = this.state
+    let count = 0
     // isLoading - show an spinner
     // error - show an alert
     if (error?.status === 401) {
-      return <Navigate to="/login" />;
+      return <Navigate to="/login" />
     }
 
     if (error?.status === 404) {
-      return <Navigate to="/404" />;
+      return <Navigate to="/404" />
     }
 
     return (
       <Page title="Advert detail">
         {console.log(advert + 'aqui')}
-        <div>{advert ? (
-          <div>
-            <article className="adverts bordered">
-              <div className="">
-                <Photo className="tweet-photo"  photo={advert.photo}/>
-              </div>
-              <div className="">
-                <div className="tweet-header">
-                  <time dateTime={advert.createdAt}>
-                    {formatDistanceToNow(new Date(advert.createdAt))}
-                  </time>
-                  <span className="adverts-name">{advert.name}</span>
-                  <span className="adverts-sale"><small>Sale/Search: </small><strong>{advert.sale ? 'Sale' : 'Search'}</strong></span>
-                  <span className="adverts-price">Price: {advert.price} €</span>
-                  
+        <div>
+          {advert ? (
+            <div>
+              <article className="adverts bordered">
+                <div className="">
+                  <Photo className="tweet-photo" photo={advert.photo} />
                 </div>
-                <div>Tags: {
-                  advert.tags.length > 1 ? advert.tags.map(function(tag){
-                    return tag + ', ';
-                  }) : advert.tags
-                }
-                </div>
-                {/* <button className="btn btn-warning" id="deleteButton" onClick={ () => {
+                <div className="">
+                  <div className="tweet-header">
+                    <time dateTime={advert.createdAt}>
+                      {formatDistanceToNow(new Date(advert.createdAt))}
+                    </time>
+                    <span className="adverts-name">{advert.name}</span>
+                    <span className="adverts-sale">
+                      <small>Sale/Search: </small>
+                      <strong>{advert.sale ? 'Sale' : 'Search'}</strong>
+                    </span>
+                    <span className="adverts-price">
+                      Price: {advert.price} €
+                    </span>
+                  </div>
+                  <div>
+                    Tags:{' '}
+                    {advert.tags.length > 1
+                      ? advert.tags.map(function (tag) {
+                          return tag + ', '
+                        })
+                      : advert.tags}
+                  </div>
+                  {/* <button className="btn btn-warning" id="deleteButton" onClick={ () => {
                   this.handleDeletedAdvert()
                 }
                   }>Delete Advert</button> */}
-                  <ButtonDeleted advertId = {this.props.tweetId}/>
-              </div>
-            </article>
-          </div>
-        ) : 'Nothing to show'}</div>
+                  <ButtonDeleted advertId={this.props.tweetId} />
+                </div>
+              </article>
+            </div>
+          ) : (
+            'Nothing to show'
+          )}
+        </div>
       </Page>
-    );
+    )
   }
 }
 
@@ -153,15 +158,14 @@ class AdvertPage extends React.Component {
 // };
 
 const TweetPageFunction = () => {
-  const ref = useRef(null);
-  const { id } = useParams();
+  const ref = useRef(null)
+  const { id } = useParams()
 
   useEffect(() => {
-    console.log('ref', ref.current);
-  }, []);
+    console.log('ref', ref.current)
+  }, [])
 
-  return <AdvertPage ref={ref} tweetId={id} />;
-};
+  return <AdvertPage ref={ref} tweetId={id} />
+}
 
-
-export default TweetPageFunction;
+export default TweetPageFunction
